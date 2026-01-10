@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IHS-SSR | Student Social Responsibility Program</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#081226;
+  --panel:#0b1630;
+  --text:#f3f6fb;
+  --muted:#c7d2e5;
+  --brand:#76e3b0;
+  --brand2:#9ad5ff;
+  --radius:18px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  font-family:'Inter',system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+  background:radial-gradient(1200px 600px at 70% -10%, rgba(118,227,176,.15), transparent 60%),
+             radial-gradient(800px 500px at 10% 100%, rgba(154,213,255,.12), transparent 60%),
+             var(--bg);
+  color:var(--text);line-height:1.6;overflow-x:hidden;
+}
+header{
+  position:sticky;top:0;z-index:50;
+  backdrop-filter:saturate(120%) blur(10px);
+  background:rgba(6,14,30,.7);
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.nav{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 20px;max-width:1100px;margin:0 auto;
+}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{height:44px;border-radius:10px}
+.brand .title{font-weight:800;letter-spacing:.2px}
+nav a{color:#dfe6ee;text-decoration:none;margin:0 12px;font-weight:600;padding:8px 10px;border-radius:10px;transition:background .3s;}
+nav a:hover{background:rgba(255,255,255,.06)}
+.hero{
+  position:relative;min-height:64vh;display:grid;place-items:center;text-align:center;
+  padding:90px 20px 120px;isolation:isolate;perspective:800px;
+}
+.hero::before{
+  content:"";position:absolute;inset:0;z-index:0;
+  background:url('banner.png') center/cover no-repeat;
+  filter:brightness(.65) saturate(1.1) blur(1px);
+  opacity:.35;
+}
+.hero::after{
+  content:"";position:absolute;inset:-10%;z-index:0;
+  background:radial-gradient(60% 40% at 50% 35%, rgba(118,227,176,.18), transparent 60%),
+             radial-gradient(40% 30% at 70% 65%, rgba(154,213,255,.16), transparent 60%);
+  filter:blur(6px);
+}
+.float{
+  position:relative;z-index:2;transform:translateZ(50px);
+  text-shadow:0 10px 30px rgba(0,0,0,.5);
+  animation:floatY 8s ease-in-out infinite;
+}
+@keyframes floatY{
+  0%,100%{transform:translateZ(50px) translateY(0)}
+  50%{transform:translateZ(50px) translateY(-10px)}
+}
+h1.big{
+  font-size:52px;line-height:1.08;margin:0;
+  background:linear-gradient(180deg,var(--brand),var(--brand2));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 6px 20px rgba(118,227,176,.25));
+}
+.sub{
+  max-width:820px;margin:14px auto 0;color:var(--muted);font-size:18px
+}
+.badges{display:flex;gap:10px;justify-content:center;margin-top:18px;flex-wrap:wrap}
+.badge{
+  padding:8px 12px;border-radius:999px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);
+  font-size:12px;color:#cfe9dc
+}
+.card-glass{
+  margin:26px auto 0;max-width:720px;
+  background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.04));
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:var(--radius);padding:18px 18px;
+  box-shadow:0 20px 60px rgba(0,0,0,.4);
+  transform:translateZ(80px) rotateX(2deg);
+  animation:breath 10s ease-in-out infinite;
+}
+@keyframes breath{
+  0%,100%{box-shadow:0 20px 60px rgba(0,0,0,.4)}
+  50%{box-shadow:0 30px 80px rgba(0,0,0,.5)}
+}
+.section{
+  max-width:1100px;margin:80px auto;padding:0 22px;
+  scroll-margin-top:100px;
+}
+h2.sec{
+  font-size:32px;margin:0 0 14px;color:#9ad5ff;text-shadow:0 6px 20px rgba(0,0,0,.35)
+}
+.panel{
+  background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
+  border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);
+  padding:22px;box-shadow:0 10px 30px rgba(0,0,0,.35)
+}
+.panel h3{
+  margin-top:18px;
+  margin-bottom:8px;
+  font-size:18px;
+  color:#e4edf9;
+}
+.panel ul{
+  padding-left:20px;
+  margin:8px 0 0;
+}
+.panel li{
+  margin-bottom:4px;
+}
+.reveal{opacity:0;transform:translateY(16px) scale(.98);transition:opacity .7s ease, transform .7s ease}
+.reveal.in{opacity:1;transform:none}
+footer{
+  background:#071021;color:#aab7cc;text-align:center;padding:32px 0;margin-top:80px;
+  border-top:1px solid rgba(255,255,255,.08)
+}
+@media (max-width:680px){
+  h1.big{font-size:38px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="nav">
+    <div class="brand">
+      <img src="logo.png" alt="IHS-SSR Logo">
+      <div class="title">IHS-SSR</div>
+    </div>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+      <a href="join.html">Join Us</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="float">
+    <h1 class="big">Student Social Responsibility Program</h1>
+    <p class="sub">Empowering Students · Strengthening Communities · Building a Better Tomorrow</p>
+    <div class="badges">
+      <span class="badge">NFLSXL IHS</span>
+      <span class="badge">Learn · Serve · Lead</span>
+      <span class="badge">2025 — 2026</span>
+    </div>
+    <div class="card-glass" role="note">
+      <strong>What is SSR?</strong> A student-led initiative that connects classroom learning with real-world action and civic engagement.
+    </div>
+  </div>
+</section>
+
+<!-- About -->
+<div class="section reveal" id="about">
+  <h2 class="sec">About the Program</h2>
+  <div class="panel">
+    <p>
+      The SSR Program is a student-led civic engagement initiative
+      designed to promote ethical leadership, social consciousness,
+      and active citizenship among high school students in the
+      International High School (IHS). By connecting academic learning
+      with real-world action, students develop the ability to think
+      critically, act compassionately, and lead responsibly.
+    </p>
+
+    <h3>Purpose &amp; Rationale</h3>
+    <p>
+      The NFLSXL IHS Student Social Responsibility (SSR) Program was created
+      to move education beyond exams and rankings. It gives students a
+      structured platform to explore what it means to be a responsible
+      global citizen, to understand the needs of their communities, and to
+      transform concern into meaningful action.
+    </p>
+
+    <h3>Program Objectives</h3>
+    <ul>
+      <li>Equip students with knowledge and skills to address social, environmental, and ethical issues.</li>
+      <li>Foster long-term partnerships with local and global organizations.</li>
+      <li>Encourage meaningful community service and project-based learning.</li>
+      <li>Build student confidence, leadership, and collaboration through real-world challenges.</li>
+    </ul>
+
+    <h3>Core Pillars: L · S · L</h3>
+    <ul>
+      <li><strong>Learn</strong> – Investigate social, environmental, and ethical issues through academic and co-curricular learning.</li>
+      <li><strong>Serve</strong> – Participate in community-based volunteer projects and outreach programs.</li>
+      <li><strong>Lead</strong> – Initiate and manage student-driven campaigns, events, and partnerships.</li>
+    </ul>
+
+    <h3>Target Participants</h3>
+    <ul>
+      <li>High school students in IHS (Grades 10–12) who are interested in social responsibility and leadership.</li>
+      <li>Faculty members who serve as mentors and advisors for student projects.</li>
+      <li>Local community partners and international collaborators who work with students on authentic challenges.</li>
+    </ul>
+
+    <h3>Expected Outcomes</h3>
+    <ul>
+      <li>Increased student awareness of and engagement with real-world issues.</li>
+      <li>Stronger ties between NFLSXL and the wider Nanjing community.</li>
+      <li>Enhanced student portfolios for university and scholarship applications.</li>
+      <li>Growth in student confidence, leadership, empathy, and communication.</li>
+    </ul>
+
+    <h3>Program Timeline (2025–2026)</h3>
+    <ul>
+      <li><strong>Phase 1 – Launch (Sept 1–15, 2025)</strong>: Website publication, program orientation, and student sign-ups.</li>
+      <li><strong>Phase 2 – Projects Begin (Sept–April 2026)</strong>: Weekly team meetings, fieldwork, and campaign development.</li>
+      <li><strong>Phase 3 – Reflection (January 2026)</strong>: Mid-year check-in, reflection sessions, and feedback from advisors and partners.</li>
+      <li><strong>Phase 4 – Showcase (May 2026)</strong>: Annual SSR Conference and digital publication of student work.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Program Goals Section (新增栏目) -->
+<div class="section reveal" id="program-goals">
+  <h2 class="sec">Program Goals</h2>
+  <div class="panel">
+    <p>• To equip students with knowledge and skills to address social issues.</p>
+    <p>• To foster long-term partnerships with local and global organizations.</p>
+    <p>• To encourage meaningful community service and project-based learning.</p>
+    <p>• To build student confidence, leadership, and collaboration through real-world challenges.</p>
+  </div>
+</div>
+
+<!-- Letter -->
+<div class="section reveal" id="about-more">
+  <h2 class="sec">Letter from team SSR</h2>
+  <div class="panel">
+    Distinguished faculty, esteemed guests, dear students, and friends,
+    On behalf of the International High School of Nanjing Xianlin Foreign Language School, it is our
+    great honor and privilege to welcome you to the launch of the Student Social Responsibility
+    Program. The SSR Program
+    Today marks the beginning of an important journey—one that extends beyond academics, into
+    the heart of what it means to be responsible global citizens. At NFLSXL, we believe education is
+    not only about excelling in the classroom but also about learning to care, to lead, and to serve.
+    Through this program, our students will have the opportunity to engage with their communities,
+    address pressing social issues, and contribute meaningfully to the world around them.
+    The SSR Program is built on three pillars: learning, serving, and leading. Together, these pillars
+    empower our students to transform awareness into action, and compassion into change. Whether
+    through local outreach in Nanjing, environmental initiatives, or global collaborations, our students
+    are stepping forward as leaders of tomorrow.
+    I would like to extend my gratitude to our dedicated teachers, supportive parents, and community
+    partners who make this vision possible. Most of all, I want to commend our students—the driving
+    force behind this initiative—for their passion, creativity, and courage to make a difference.
+    Let us celebrate this milestone and look ahead with optimism. May this program inspire us all to
+    act with responsibility, to serve with humility, and to lead with vision.
+    Thank you, and welcome once again to the NFLSXL IHS Student Social Responsibility Program.
+  </div>
+</div>
+
+<!-- Projects -->
+<div class="section reveal" id="projects">
+  <h2 class="sec">Key Projects</h2>
+  <div class="panel">
+    <p>
+      SSR projects include community outreach, environmental action, and international collaboration.
+      Each project strengthens leadership, creativity, and civic awareness among students.
+    </p>
+
+    <h3>Signature Projects</h3>
+    <ul>
+      <li><strong>Community Outreach in Nanjing</strong> – Visits and long-term partnerships with elderly homes, migrant worker schools, and underserved communities; initiatives on waste reduction and neighborhood improvement.</li>
+      <li><strong>SSR Annual Conference</strong> – A year-end showcase where students present their projects, share impact stories, and engage with guest speakers from education, NGOs, and industry.</li>
+      <li><strong>SSR Awareness Campaigns</strong> – Student-led campaigns on mental health, gender equity, digital safety, climate justice, and other urgent social issues.</li>
+      <li><strong>Global Citizenship Projects</strong> – Collaborations with international schools, NGOs, and online conferences to explore global challenges and cross-cultural solutions.</li>
+    </ul>
+
+    <h3>How Projects Work</h3>
+    <ul>
+      <li>Students form project teams based on shared interests (e.g., environment, education, public health).</li>
+      <li>Each team works with a faculty advisor to design a project plan, set measurable goals, and identify community partners.</li>
+      <li>Teams meet weekly for research, planning, and reflection, combining classroom learning with fieldwork.</li>
+      <li>Throughout the year, students collect data, document their work, and prepare presentations and digital portfolios.</li>
+    </ul>
+
+    <h3>Assessment &amp; Evaluation</h3>
+    <ul>
+      <li>Student reflection logs and journals to track learning and personal growth.</li>
+      <li>Monthly advisor reviews focusing on leadership, teamwork, and project progress.</li>
+      <li>Feedback from community partners on impact and collaboration.</li>
+      <li>Final rubric-based assessment of communication, initiative, and social impact, often used as part of student portfolios.</li>
+    </ul>
+
+    <h3>Sustainability &amp; Continuity</h3>
+    <ul>
+      <li>Annual handover from graduating leaders to younger peers through an SSR student council/committee structure.</li>
+      <li>Training and onboarding for new faculty advisors each academic year.</li>
+      <li>Ongoing web updates and digital archiving of projects to inspire future cohorts.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Contact -->
+<div class="section reveal" id="contact">
+  <h2 class="sec">Contact Us</h2>
+  <div class="panel">
+    <h3>Program Contacts</h3>
+    <p>
+      Email: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br>
+      Address: NFLSXL International High School, Nanjing
+    </p>
+
+    <h3>Support Infrastructure</h3>
+    <ul>
+      <li><strong>Faculty Roles</strong> – Advisors guide students on project design, ethical practice, and impact evaluation. SSR themes are integrated into subjects such as Psychology, English, and Social Studies.</li>
+      <li><strong>Student Leadership</strong> – An SSR student council helps coordinate projects, organize events, and support communication with partners.</li>
+    </ul>
+
+    <h3>Tools &amp; Platforms</h3>
+    <ul>
+      <li><strong>SSR Website</strong> – A dedicated platform (dark mode, interactive layouts, and sign-up forms) for sharing updates, stories, and project results.</li>
+      <li><strong>Social Media</strong> – Channels such as Instagram, YouTube, and WeChat are used to promote campaigns and highlight student work.</li>
+      <li><strong>Digital Publications</strong> – Annual reports and online portfolios document student projects and community impact.</li>
+    </ul>
+
+    <h3>Partnerships</h3>
+    <ul>
+      <li><strong>Local</strong> – Community centers, NGOs, schools for underserved populations, and other groups in Nanjing who collaborate on outreach, education, and service projects.</li>
+      <li><strong>Global</strong> – International schools, nonprofit organizations, and online conferences that provide a platform for global citizenship and intercultural dialogue.</li>
+    </ul>
+
+    <p style="margin-top:16px;">
+      For partnership, mentoring, or investment inquiries related to the SSR Program, please reach out to the
+      International High School office and indicate “IHS-SSR” in your message subject line.
+    </p>
+  </div>
+</div>
+
+<!-- Organization and Management -->
+<div class="section reveal" id="organization">
+  <h2 class="sec">Organization and Management</h2>
+  <div class="panel">
+    <p><strong>George Boadi</strong><br>Program Lead / Presenter</p>
+    <p><strong>Miss Faye</strong><br>Faculty Advisor</p>
+  </div>
+</div>
+
+<footer>
+  <p><strong>© 2025 NFLSXL IHS — Student Social Responsibility Program</strong></p>
+  <p><strong>Web design &amp; creat: Robin Chen ^_^</strong></p>
+</footer>
+
+<script>
+// Parallax tilt
+(function(){
+  const hero = document.querySelector('.hero');
+  const float = document.querySelector('.float');
+  hero.addEventListener('mousemove', e => {
+    const r = hero.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - .5;
+    const y = (e.clientY - r.top) / r.height - .5;
+    float.style.transform = `translateZ(50px) translateY(0) rotateX(${y*-4}deg) rotateY(${x*4}deg)`;
+  });
+  hero.addEventListener('mouseleave', ()=>{float.style.transform='translateZ(50px)';});
+})();
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(en=>{
+    if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); }
+  });
+},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
