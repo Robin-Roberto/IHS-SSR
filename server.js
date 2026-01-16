@@ -1,75 +1,70 @@
 // server.js
 const express = require("express");
-const fs = require("fs");
 const path = require("path");
+const { Resend } = require("resend");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-/* =====================================================
-   1️⃣ 基础中间件
-===================================================== */
+// 这三个要在本地/Render 配环境变量
+const RESEND_API_KEY = process.env.RESEND_API_KEY;
+const TO_EMAIL = process.env.TO_EMAIL;     // 你接收报名的邮箱
+const FROM_EMAIL = process.env.FROM_EMAIL; // Resend 允许的发件人（必须是你在 Resend 验证过的）
 
-// 允许解析 JSON（fetch / axios 提交用）
+const resend = new Resend(RESEND_API_KEY);
+
+// 解析 JSON
 app.use(express.json());
-
-// 允许解析表单（HTML form 用）
-app.use(express.urlencoded({ extended: true }));
 
 // 静态托管 public 文件夹
 app.use(express.static(path.join(__dirname, "public")));
 
-/* =====================================================
-   2️⃣ JOIN 表单接口
-===================================================== */
+// join 表单：发邮件
+app.post("/api/join", async (req, res) => {
+  try {
+    const { contact, reason } = req.body || {};
+    if (!contact || String(contact).trim() === "") {
+      return res.status(400).json({ error: "Contact is required" });
+    }
 
-// 👉 查看报名数据（调试用）
-// 访问：http://localhost:3000/api/join
-app.get("/api/join", (req, res) => {
-  const filePath = path.join(__dirname, "join-data.json");
+    const contactClean = String(contact).trim();
+    const reasonClean = reason ? String(reason).trim() : "";
+    const createdAt = new Date().toISOString();
 
-  if (!fs.existsSync(filePath)) {
-    return res.json([]);
+    const subject = `New IHS-SSR Join: ${contactClean}`;
+    const html = `
+      <div style="font-family: Arial, sans-serif; line-height: 1.6;">
+        <h2>New Join Application</h2>
+        <p><b>Contact:</b> ${escapeHtml(contactClean)}</p>
+        <p><b>Reason:</b><br/>${escapeHtml(reasonClean).replace(/\n/g, "<br/>")}</p>
+        <p><b>Time:</b> ${createdAt}</p>
+      </div>
+    `;
+
+    const result = await resend.emails.send({
+      from: FROM_EMAIL,
+      to: TO_EMAIL,
+      subject,
+      html,
+    });
+
+    console.log("✅ Email sent:", result?.data?.id || result);
+    return res.json({ ok: true });
+  } catch (err) {
+    console.error("❌ /api/join error:", err);
+    return res.status(500).json({ error: "Server error" });
   }
-
-  const data = JSON.parse(fs.readFileSync(filePath, "utf8") || "[]");
-  res.json(data);
 });
 
-// 👉 提交报名表单
-app.post("/api/join", (req, res) => {
-  const { contact, reason } = req.body;
-
-  if (!contact) {
-    return res.status(400).json({ error: "Contact is required" });
-  }
-
-  const entry = {
-    contact,
-    reason: reason || "",
-    createdAt: new Date().toISOString(),
-  };
-
-  const filePath = path.join(__dirname, "join-data.json");
-
-  let data = [];
-  if (fs.existsSync(filePath)) {
-    data = JSON.parse(fs.readFileSync(filePath, "utf8") || "[]");
-  }
-
-  data.push(entry);
-
-  fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
-
-  console.log("✅ New join submit:", entry);
-
-  res.json({ ok: true });
-});
-
-/* =====================================================
-   3️⃣ 启动服务器
-===================================================== */
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
 
 app.listen(PORT, () => {
-  console.log(`🚀 Server running at http://localhost:${PORT}`);
+  console.log(`Server running at http://localhost:${PORT}`);
 });

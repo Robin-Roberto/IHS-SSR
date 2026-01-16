@@ -36,9 +36,10 @@
     .card {
       width: 100%;
       max-width: 520px;
-      background: radial-gradient(circle at top left, rgba(118, 227, 176, 0.12), transparent 55%),
-                  radial-gradient(circle at bottom right, rgba(154, 213, 255, 0.12), transparent 55%),
-                  var(--card);
+      background:
+        radial-gradient(circle at top left, rgba(118, 227, 176, 0.12), transparent 55%),
+        radial-gradient(circle at bottom right, rgba(154, 213, 255, 0.12), transparent 55%),
+        var(--card);
       border-radius: 26px;
       padding: 28px 26px 24px;
       box-shadow:
@@ -145,7 +146,7 @@
     }
 
     .reason-wrapper.visible {
-      max-height: 260px; /* 足够容纳 textarea */
+      max-height: 260px;
       opacity: 1;
       transform: translateY(0);
     }
@@ -189,25 +190,11 @@
       color: var(--muted);
     }
 
-    .status.ok {
-      color: #7ff7c3;
-    }
-
-    .status.error {
-      color: #ff9aa5;
-    }
-
-    @media (max-width: 480px) {
-      .card {
-        padding: 22px 18px 18px;
-        border-radius: 22px;
-      }
-      h1 {
-        font-size: 22px;
-      }
-    }
+    .status.ok { color: #7ff7c3; }
+    .status.error { color: #ff9aa5; }
   </style>
 </head>
+
 <body>
   <main class="card">
     <div class="card-inner">
@@ -219,12 +206,10 @@
       </p>
 
       <form id="joinForm">
-        <!-- 联系方式 -->
         <div class="field">
           <label for="contact">Contact (Email or Phone)</label>
           <input
             id="contact"
-            name="contact"
             type="text"
             placeholder="example@school.edu or +86 138-0000-0000"
             required
@@ -232,23 +217,18 @@
           <div class="helper">We’ll only use this to reply to your application.</div>
         </div>
 
-        <!-- 动态展开的大文本框 -->
         <div id="reasonWrapper" class="reason-wrapper">
           <div class="field">
             <label for="reason">Why do you want to join us?</label>
             <textarea
               id="reason"
-              name="reason"
               rows="4"
               placeholder="Tell us about your interests, experience, or what you hope to create with IHS-SSR..."
             ></textarea>
           </div>
         </div>
 
-        <button type="submit">
-          Send Application
-        </button>
-
+        <button type="submit">Send Application</button>
         <p id="status" class="status"></p>
       </form>
     </div>
@@ -259,8 +239,8 @@
     const reasonWrapper = document.getElementById("reasonWrapper");
     const form = document.getElementById("joinForm");
     const statusEl = document.getElementById("status");
+    const reasonInput = document.getElementById("reason");
 
-    // 当用户开始输入联系方式时，展开“理由”文本框
     contactInput.addEventListener("input", () => {
       if (contactInput.value.trim().length >= 3) {
         reasonWrapper.classList.add("visible");
@@ -269,11 +249,11 @@
       }
     });
 
-    form.addEventListener("submit", async (event) => {
-      event.preventDefault(); // 不让浏览器刷新页面
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
 
       const contact = contactInput.value.trim();
-      const reason = document.getElementById("reason").value.trim();
+      const reason = reasonInput.value.trim();
 
       if (!contact) {
         statusEl.textContent = "Please leave at least an email or phone number.";
@@ -281,32 +261,25 @@
         return;
       }
 
-      const payload = {
-        contact,
-        reason,
-        createdAt: new Date().toISOString()
-      };
+      statusEl.textContent = "Sending…";
+      statusEl.className = "status";
 
-      // 👉 前端视角：把数据发到 /api/join
       try {
         const res = await fetch("/api/join", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
+          body: JSON.stringify({ contact, reason })
         });
 
-        if (res.ok) {
-          statusEl.textContent = "Thanks! Your application has been sent.";
-          statusEl.className = "status ok";
-          form.reset();
-          reasonWrapper.classList.remove("visible");
-        } else {
-          statusEl.textContent = "Something went wrong. Please try again later.";
-          statusEl.className = "status error";
-        }
+        if (!res.ok) throw new Error("Server error");
+
+        statusEl.textContent = "Thanks! Your application has been sent.";
+        statusEl.className = "status ok";
+        form.reset();
+        reasonWrapper.classList.remove("visible");
       } catch (err) {
         console.error(err);
-        statusEl.textContent = "Network error. Please check your connection.";
+        statusEl.textContent = "Failed to send. Please try again later.";
         statusEl.className = "status error";
       }
     });
